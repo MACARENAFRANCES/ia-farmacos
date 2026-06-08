@@ -9,7 +9,7 @@
 
 body {
   margin:0;
-  font-family: 'Segoe UI';
+  font-family:'Segoe UI';
   background:#f4f9fc;
 }
 
@@ -31,7 +31,7 @@ header {
   box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* TARJETAS */
+/* CAJAS */
 .card {
   background:#f7fbff;
   padding:20px;
@@ -39,29 +39,27 @@ header {
   border-radius:8px;
   margin-top:20px;
   position:relative;
-  cursor:pointer;
-}
-
-/* TEXTO OCULTO */
-.hidden {
-  opacity:0;
-  max-height:0;
-  overflow:hidden;
   transition:0.3s;
 }
 
-/* APARECE AL PASAR RATÓN */
-.card:hover .hidden {
+/* TEXTO EXTRA OCULTO AL PRINCIPIO */
+.more {
+  opacity:0;
+  max-height:0;
+  overflow:hidden;
+  transition:0.4s;
+  font-size:14px;
+  color:#555;
+}
+
+/* HOVER MUESTRA DETALLE */
+.card:hover .more {
   opacity:1;
   max-height:200px;
   margin-top:10px;
 }
 
-/* TITULOS */
 h2 {color:#0a3d62;}
-
-/* CALCULADORA */
-input {margin:10px;}
 
 </style>
 </head>
@@ -70,26 +68,33 @@ input {margin:10px;}
 
 <header>
 <h1>AI Drug Screening</h1>
-<p>Modelización matemática + explicación intuitiva</p>
+<p>Modelo matemático + explicación intuitiva</p>
 </header>
+
+<!-- INTRO -->
+<div class="section">
+<h2>Introducción</h2>
+
+<div class="card">
+Las curvas dosis–respuesta permiten estudiar cómo cambia el efecto de un fármaco al modificar la concentración.
+
+<div class="more">
+Este tipo de curva describe todo el comportamiento del sistema biológico, lo que permite entender mejor la eficacia del fármaco frente a métodos más simples.
+</div>
+
+</div>
+
+</div>
 
 <!-- JUSTIFICACION -->
 <div class="section">
 <h2>Justificación</h2>
 
 <div class="card">
-Pasa el ratón para ver explicación
+Se utilizan curvas completas en lugar de valores como el IC50 para tener una visión más real del comportamiento del fármaco.
 
-<div class="hidden">
-La inteligencia artificial moderna no usa solo valores como el IC50 porque estos simplifican demasiado el comportamiento de un fármaco.  
-
-Se prefieren curvas completas dosis–respuesta porque permiten analizar:
-
-• cómo crece el efecto  
-• si hay saturación  
-• el rango útil de dosis  
-
-Desde el punto de vista matemático, esto implica ajustar una curva a muchos datos → sistema sobredimensionado.
+<div class="more">
+Dos fármacos pueden tener el mismo IC50 pero efectos completamente distintos en otras zonas de la curva, lo que hace necesario analizar toda la relación dosis-respuesta.
 </div>
 
 </div>
@@ -101,14 +106,10 @@ Desde el punto de vista matemático, esto implica ajustar una curva a muchos dat
 <h2>Problema técnico</h2>
 
 <div class="card">
-Pasa el ratón 👇
+Se dispone de datos experimentales y se busca una función que los represente.
 
-<div class="hidden">
-Se tienen datos experimentales (concentración vs respuesta).  
-
-Queremos encontrar una función que describa ese comportamiento de forma aproximada.  
-
-Esto lleva a estimar parámetros del modelo usando técnicas numéricas.
+<div class="more">
+Este problema es un sistema sobredimensionado: muchos datos y pocos parámetros, por lo que se necesita ajuste de curvas.
 </div>
 
 </div>
@@ -120,14 +121,12 @@ Esto lleva a estimar parámetros del modelo usando técnicas numéricas.
 <h2>Modelo matemático</h2>
 
 <div class="card">
-Pasa el ratón 👇
-
-<div class="hidden">
 Se usa una función logística:
 
 f(c) = Emax / (1 + (c/IC50)^h)
 
-Los parámetros se ajustan minimizando el error entre datos reales y modelo teórico usando mínimos cuadrados.
+<div class="more">
+Los parámetros se calculan minimizando el error entre la curva teórica y los datos experimentales mediante mínimos cuadrados.
 </div>
 
 </div>
@@ -160,18 +159,10 @@ Resultado:
 <h2>Interpretación</h2>
 
 <div class="card">
-Pasa el ratón 👇
+El modelo permite analizar cómo varía el efecto con la dosis.
 
-<div class="hidden">
-Este modelo permite entender cómo pequeñas variaciones en la dosis pueden provocar grandes cambios en el efecto.  
-
-Esto es clave para:
-
-• seleccionar dosis óptimas  
-• evitar toxicidad  
-• comparar candidatos farmacológicos  
-
-Hace que el modelo sea útil para profesionales sin necesidad de entender la matemática interna.
+<div class="more">
+Esto ayuda en la selección de dosis óptimas y en la evaluación de candidatos farmacológicos, facilitando la toma de decisiones incluso sin conocimientos matemáticos avanzados.
 </div>
 
 </div>
@@ -196,7 +187,6 @@ function update(){
 }
 
 function draw(ic50){
-
   var canvas = document.getElementById("grafico");
   var ctx = canvas.getContext("2d");
 
