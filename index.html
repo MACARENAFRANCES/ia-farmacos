@@ -2,137 +2,713 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>IA en farmacología</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IA en cribado farmacológico</title>
+  <style>
+    :root{
+      --azul:#0a3d62;
+      --verde:#16c79a;
+      --verde2:#1dd1a1;
+      --fondo:#f4f9fc;
+      --texto:#223;
+      --gris:#6b7280;
+      --blanco:#ffffff;
+      --borde:#dbe7f1;
+      --naranja:#f59e0b;
+    }
 
-<style>
+    *{box-sizing:border-box;}
 
-body {
-  margin:0;
-  font-family: 'Segoe UI';
-  background:#f4f9fc;
-}
+    body{
+      margin:0;
+      font-family:'Segoe UI', Arial, sans-serif;
+      background:linear-gradient(180deg,#eef7fb 0%, #f8fbfd 100%);
+      color:var(--texto);
+    }
 
-header {
-  background: linear-gradient(120deg,#0a3d62,#1dd1a1);
-  color:white;
-  padding:40px;
-  text-align:center;
-}
+    header{
+      background:linear-gradient(120deg,var(--azul),var(--verde2));
+      color:white;
+      padding:48px 24px;
+      text-align:center;
+      box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    }
 
-.section {
-  max-width:1000px;
-  margin:40px auto;
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.1);
-}
+    header h1{
+      margin:0;
+      font-size:clamp(28px,4vw,42px);
+      letter-spacing:.3px;
+    }
 
-.card {
-  margin-top:20px;
-  padding:20px;
-  background:#f7fbff;
-  border-left:5px solid #1dd1a1;
-}
+    header p{
+      margin:12px auto 0;
+      max-width:900px;
+      font-size:18px;
+      line-height:1.5;
+      opacity:.96;
+    }
 
-h2 {color:#0a3d62;}
+    .container{
+      max-width:1150px;
+      margin:32px auto 60px;
+      padding:0 18px;
+    }
 
-input {
-  margin:10px;
-}
+    .section{
+      background:var(--blanco);
+      border:1px solid var(--borde);
+      border-radius:18px;
+      padding:28px;
+      margin-bottom:24px;
+      box-shadow:0 10px 24px rgba(10,61,98,0.06);
+    }
 
-</style>
+    .section h2{
+      margin-top:0;
+      color:var(--azul);
+      font-size:26px;
+    }
+
+    .section p{
+      line-height:1.75;
+      font-size:16px;
+    }
+
+    .badge{
+      display:inline-block;
+      background:#e7fbf5;
+      color:#0b7b5f;
+      border:1px solid #bdf1e0;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:600;
+      margin-bottom:12px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:22px;
+    }
+
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr;}
+    }
+
+    .card{
+      background:#f8fcff;
+      border:1px solid var(--borde);
+      border-left:6px solid var(--verde);
+      padding:18px;
+      border-radius:14px;
+      margin-top:16px;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 18px rgba(0,0,0,0.06);
+    }
+
+    .formula{
+      background:#0f172a;
+      color:#e5f2ff;
+      padding:16px;
+      border-radius:12px;
+      overflow:auto;
+      font-family:Consolas, monospace;
+      font-size:15px;
+      line-height:1.7;
+      margin-top:12px;
+    }
+
+    .mini-title{
+      font-weight:700;
+      color:var(--azul);
+      margin-bottom:10px;
+      font-size:18px;
+    }
+
+    .simulator{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    @media (max-width: 980px){
+      .simulator{grid-template-columns:1fr;}
+    }
+
+    .panel{
+      background:#fbfeff;
+      border:1px solid var(--borde);
+      border-radius:16px;
+      padding:18px;
+    }
+
+    .control{
+      margin-bottom:18px;
+    }
+
+    .control label{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-weight:600;
+      margin-bottom:8px;
+      color:#16324a;
+    }
+
+    .control input[type="range"]{
+      width:100%;
+      accent-color:var(--verde2);
+      cursor:pointer;
+    }
+
+    .value-pill{
+      display:inline-block;
+      min-width:84px;
+      text-align:center;
+      background:#eef7ff;
+      color:var(--azul);
+      border:1px solid #d7e9f8;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .results{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .result-box{
+      background:white;
+      border:1px solid var(--borde);
+      border-radius:14px;
+      padding:14px;
+    }
+
+    .result-box .label{
+      font-size:13px;
+      color:var(--gris);
+      margin-bottom:6px;
+    }
+
+    .result-box .big{
+      font-size:26px;
+      font-weight:800;
+      color:var(--azul);
+    }
+
+    .note{
+      font-size:14px;
+      color:var(--gris);
+      line-height:1.6;
+      margin-top:12px;
+    }
+
+    canvas{
+      width:100%;
+      max-width:100%;
+      background:white;
+      border:1px solid var(--borde);
+      border-radius:14px;
+      box-shadow:inset 0 0 0 1px #f5fbff;
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:12px;
+      font-size:14px;
+      color:#374151;
+    }
+
+    .legend span{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .dot{
+      width:12px;height:12px;border-radius:50%;
+      display:inline-block;
+    }
+
+    .dot-green{background:var(--verde2);}
+    .dot-orange{background:var(--naranja);}
+    .dot-blue{background:#2563eb;}
+
+    ul{
+      line-height:1.8;
+      padding-left:20px;
+    }
+
+    footer{
+      text-align:center;
+      color:var(--gris);
+      font-size:14px;
+      padding:10px 20px 40px;
+    }
+
+    .cta{
+      margin-top:10px;
+      font-size:15px;
+      color:#0d4f77;
+      font-weight:600;
+    }
+  </style>
 </head>
-
 <body>
 
 <header>
-<h1>AI Drug Screening</h1>
-<p>Modelo matemático interactivo</p>
+  <h1>IA y modelización de curvas dosis–respuesta</h1>
+  <p>
+    Aplicación de métodos de ajuste de curvas y resolución de sistemas sobredimensionados
+    al cribado computacional de fármacos.
+  </p>
 </header>
 
-<div class="section">
-<h2>Justificación</h2>
-<div class="card">
-La inteligencia artificial en farmacología utiliza curvas dosis–respuesta completas en lugar de métricas simples como el IC50, ya que permiten entender mejor el comportamiento del fármaco.
+<div class="container">
 
-Esto mejora la selección de candidatos y permite una interpretación más completa de los efectos.
+  <section class="section">
+    <div class="badge">Tema actual elegido</div>
+    <h2>1. Tema del trabajo</h2>
+    <p>
+      El tema elegido es la <strong>predicción y análisis de curvas dosis–respuesta completas</strong>
+      en cribado computacional de fármacos asistido por inteligencia artificial. En lugar de resumir
+      la actividad de un fármaco únicamente con un valor aislado como el IC50, se estudia la
+      <strong>curva completa</strong>, porque esta describe con más detalle cómo cambia el efecto al variar
+      la concentración.
+    </p>
+
+    <div class="card">
+      <div class="mini-title">¿Por qué este tema es adecuado para la actividad?</div>
+      <p>
+        Porque conecta de forma directa con los contenidos matemáticos de la tarea:
+        hay que estimar pocos parámetros farmacológicos a partir de muchas observaciones
+        experimentales, lo que genera un <strong>sistema sobredimensionado</strong>. Además,
+        el ajuste de una curva logística es un caso clásico de <strong>ajuste no lineal</strong>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="badge">Justificación</div>
+    <h2>2. Justificación técnica de la elección</h2>
+    <p>
+      La elección no se justifica solo porque el tema sea interesante, sino porque
+      <strong>tiene sentido científico y matemático</strong>. En farmacología computacional actual,
+      resulta más útil modelizar la curva dosis–respuesta completa que quedarse únicamente
+      con un parámetro resumen. La razón es intuitiva: dos fármacos pueden tener un IC50 parecido,
+      pero comportarse de forma muy distinta en eficacia máxima, pendiente o rango útil de dosis.
+    </p>
+
+    <div class="card">
+      <div class="mini-title">Interpretación intuitiva</div>
+      <p>
+        Si una persona no tiene formación en optimización, puede entenderlo así:
+        <strong>no basta con saber “cuándo empieza a funcionar” un fármaco; también importa
+        saber cómo evoluciona su efecto cuando la dosis sube</strong>. La curva completa
+        cuenta esa historia de forma visual y cuantitativa.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="mini-title">Interpretación matemática</div>
+      <p>
+        Desde el punto de vista matemático, disponemos de múltiples pares
+        <em>(concentración, respuesta)</em> y buscamos los parámetros del modelo que mejor reproduzcan
+        esos datos. El problema se resuelve minimizando el error entre observaciones y predicción,
+        normalmente mediante mínimos cuadrados no lineales.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="badge">Problema técnico</div>
+    <h2>3. Enunciado del problema</h2>
+    <p>
+      Consideremos un candidato farmacológico que ha sido priorizado por técnicas de IA.
+      Para validarlo, se mide la respuesta biológica de una línea celular a distintas
+      concentraciones del compuesto. A partir de estos datos, se quiere estimar una curva
+      dosis–respuesta que permita describir su comportamiento farmacológico.
+    </p>
+
+    <div class="formula">
+f(c) = Emax / (1 + (IC50 / c)<sup>h</sup>)
+    </div>
+
+    <p>
+      Donde:
+    </p>
+    <ul>
+      <li><strong>c</strong>: concentración del fármaco</li>
+      <li><strong>Emax</strong>: efecto máximo alcanzable</li>
+      <li><strong>IC50</strong>: concentración que produce el 50% del efecto máximo</li>
+      <li><strong>h</strong>: pendiente de la curva (coeficiente de Hill)</li>
+    </ul>
+
+    <div class="card">
+      <div class="mini-title">Por qué es un sistema sobredimensionado</div>
+      <p>
+        Porque normalmente se tienen muchas observaciones experimentales
+        (por ejemplo, 8, 10 o 20 puntos de dosis y respuesta) y solo unos pocos parámetros
+        desconocidos del modelo. Por ello, en general no existe una solución exacta que pase
+        por todos los puntos, y hay que buscar la <strong>mejor aproximación</strong>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="badge">Método matemático</div>
+    <h2>4. Resolución del modelo</h2>
+    <div class="grid">
+      <div>
+        <p>
+          El ajuste se formula minimizando la suma de los errores cuadrados entre la respuesta
+          observada y la respuesta predicha por la curva:
+        </p>
+
+        <div class="formula">
+Minimizar: &nbsp; Σ (y<sub>i</sub> − f(c<sub>i</sub>))²
+        </div>
+
+        <p>
+          Este criterio permite encontrar los parámetros que mejor explican los datos en conjunto.
+          En problemas no lineales como este se utilizan algoritmos como:
+        </p>
+        <ul>
+          <li><strong>Gauss–Newton</strong></li>
+          <li><strong>Levenberg–Marquardt</strong></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="mini-title">Explicación intuitiva para no especialistas</div>
+          <p>
+            El algoritmo prueba diferentes curvas hasta encontrar la que más se parece
+            al comportamiento observado en el laboratorio. Dicho de forma simple:
+            <strong>busca la curva “más coherente” con los datos reales</strong>.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="mini-title">Utilidad farmacológica</div>
+          <p>
+            Una vez ajustada la curva, se puede valorar si el compuesto parece prometedor,
+            si requiere concentraciones demasiado altas o si su crecimiento de efecto es
+            demasiado brusco o demasiado débil.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="badge">Simulador interactivo</div>
+    <h2>5. Calculadora interactiva dosis–respuesta</h2>
+    <p>
+      A continuación se incluye un simulador para que cualquier persona, incluso sin formación
+      en optimización, pueda <strong>ver de forma intuitiva</strong> cómo afectan los parámetros
+      al comportamiento del fármaco.
+    </p>
+
+    <div class="simulator">
+      <div class="panel">
+        <div class="control">
+          <label>
+            <span>Concentración del fármaco (c)</span>
+            <span class="value-pill" id="concValue">50</span>
+          </label>
+          <input type="range" id="conc" min="1" max="200" step="1" value="50">
+        </div>
+
+        <div class="control">
+          <label>
+            <span>IC50</span>
+            <span class="value-pill" id="ic50Value">60</span>
+          </label>
+          <input type="range" id="ic50" min="5" max="150" step="1" value="60">
+        </div>
+
+        <div class="control">
+          <label>
+            <span>Pendiente de la curva (h)</span>
+            <span class="value-pill" id="hillValue">2.0</span>
+          </label>
+          <input type="range" id="hill" min="0.5" max="5" step="0.1" value="2.0">
+        </div>
+
+        <div class="control">
+          <label>
+            <span>Efecto máximo (Emax)</span>
+            <span class="value-pill" id="emaxValue">100</span>
+          </label>
+          <input type="range" id="emax" min="20" max="100" step="1" value="100">
+        </div>
+
+        <div class="results">
+          <div class="result-box">
+            <div class="label">Efecto estimado</div>
+            <div class="big" id="effectResult">0.00%</div>
+          </div>
+
+          <div class="result-box">
+            <div class="label">Interpretación</div>
+            <div class="big" id="effectText" style="font-size:18px;">Bajo</div>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>Cómo leerlo:</strong> al mover la concentración, ves cuánto efecto produce esa dosis.
+          Al cambiar el IC50, desplazas la curva hacia la izquierda o la derecha.
+          Al cambiar la pendiente, haces la transición más suave o más brusca.
+        </div>
+
+        <div class="cta">
+          Prueba, por ejemplo: subir la concentración y bajar el IC50 para ver cómo aumenta el efecto.
+        </div>
+      </div>
+
+      <div class="panel">
+        <canvas id="chart" width="540" height="360"></canvas>
+        <div class="legend">
+          <span><i class="dot dot-green"></i> Curva dosis–respuesta</span>
+          <span><i class="dot dot-orange"></i> Línea vertical IC50</span>
+          <span><i class="dot dot-blue"></i> Punto dosis actual</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="badge">Resultados e interpretación</div>
+    <h2>6. Interpretación de resultados</h2>
+    <div class="card">
+      <div class="mini-title">Lectura farmacológica</div>
+      <p>
+        Si el IC50 es bajo, el fármaco produce efecto con concentraciones relativamente pequeñas,
+        lo que puede ser deseable. Si el efecto máximo es limitado, el compuesto podría no alcanzar
+        una respuesta suficientemente alta. Si la pendiente es muy grande, pequeñas variaciones de dosis
+        cambian mucho el efecto.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="mini-title">Lectura matemática</div>
+      <p>
+        El modelo muestra cómo unos pocos parámetros capturan el comportamiento global del sistema.
+        El objetivo del ajuste no es obtener una fórmula “bonita”, sino una representación cuantitativa
+        que resuma bien los datos observados y permita comparaciones entre candidatos.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="mini-title">Limitaciones</div>
+      <p>
+        Este simulador es una simplificación pedagógica. En aplicaciones reales, los datos pueden tener
+        ruido experimental, efectos atípicos, respuestas bifásicas o variabilidad biológica que exijan
+        modelos más elaborados. Aun así, el ejemplo permite comprender la lógica del ajuste y su utilidad.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="badge">Tecnología y comunicación</div>
+    <h2>7. Sitio web como medio de comunicación científica</h2>
+    <p>
+      La explicación se desarrolla en forma de página web para comunicar los resultados de manera visual,
+      estructurada e intuitiva. Esto responde a la necesidad de que el contenido pueda ser comprendido
+      por profesionales que no necesariamente tengan formación en optimización de funciones, pero sí
+      interés en interpretar el significado aplicado del modelo.
+    </p>
+  </section>
+
 </div>
-</div>
 
-<div class="section">
-<h2>Simulador interactivo</h2>
-
-<div class="card">
-Introduce valores para simular el efecto del fármaco:
-<br><br>
-
-Concentración:
-<input type="range" id="conc" min="1" max="300" value="150" oninput="update()">
-
-<br>
-
-IC50:
-<input type="range" id="ic50" min="50" max="250" value="150" oninput="update()">
-
-<br><br>
-
-Resultado:
-<span id="resultado">0</span> %
-</div>
-
-<canvas id="grafico" width="400" height="300"></canvas>
-
-</div>
-
-<div class="section">
-<h2>Interpretación</h2>
-<div class="card">
-El modelo permite visualizar cómo pequeñas variaciones en la dosis afectan al resultado.
-
-Esto es clave para seleccionar dosis óptimas y minimizar efectos adversos.
-</div>
-</div>
+<footer>
+  Trabajo académico · IA aplicada a farmacología · Simulación interactiva de curva dosis–respuesta
+</footer>
 
 <script>
+  const conc = document.getElementById("conc");
+  const ic50 = document.getElementById("ic50");
+  const hill = document.getElementById("hill");
+  const emax = document.getElementById("emax");
 
-function modelo(c, ic50){
-  return 100 / (1 + Math.exp(-(c-ic50)/30));
-}
+  const concValue = document.getElementById("concValue");
+  const ic50Value = document.getElementById("ic50Value");
+  const hillValue = document.getElementById("hillValue");
+  const emaxValue = document.getElementById("emaxValue");
 
-function update(){
+  const effectResult = document.getElementById("effectResult");
+  const effectText = document.getElementById("effectText");
 
-  let c = document.getElementById("conc").value;
-  let ic50 = document.getElementById("ic50").value;
+  const canvas = document.getElementById("chart");
+  const ctx = canvas.getContext("2d");
 
-  let y = modelo(c, ic50);
-  document.getElementById("resultado").innerText = y.toFixed(2);
-
-  draw(ic50);
-}
-
-function draw(ic50){
-
-  var canvas = document.getElementById("grafico");
-  var ctx = canvas.getContext("2d");
-
-  ctx.clearRect(0,0,400,300);
-
-  ctx.beginPath();
-
-  for(let x=0; x<300; x++){
-    let y = modelo(x, ic50);
-    ctx.lineTo(x+40,260-y*2);
+  function doseResponse(c, ic50Val, hVal, emaxVal){
+    if (c <= 0) return 0;
+    return emaxVal / (1 + Math.pow(ic50Val / c, hVal));
   }
 
-  ctx.strokeStyle="green";
-  ctx.lineWidth=3;
-  ctx.stroke();
-}
+  function interpretation(effect){
+    if (effect < 20) return "Muy bajo";
+    if (effect < 40) return "Bajo";
+    if (effect < 60) return "Medio";
+    if (effect < 80) return "Alto";
+    return "Muy alto";
+  }
 
-update();
+  function drawChart(){
+    const cNow = parseFloat(conc.value);
+    const ic50Now = parseFloat(ic50.value);
+    const hNow = parseFloat(hill.value);
+    const emaxNow = parseFloat(emax.value);
 
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const left = 55;
+    const right = canvas.width - 25;
+    const top = 25;
+    const bottom = canvas.height - 45;
+    const width = right - left;
+    const height = bottom - top;
+
+    // Fondo
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Rejilla
+    ctx.strokeStyle = "#e6eef5";
+    ctx.lineWidth = 1;
+    for(let i=0;i<=5;i++){
+      let y = top + i*(height/5);
+      ctx.beginPath();
+      ctx.moveTo(left,y);
+      ctx.lineTo(right,y);
+      ctx.stroke();
+    }
+    for(let i=0;i<=5;i++){
+      let x = left + i*(width/5);
+      ctx.beginPath();
+      ctx.moveTo(x,top);
+      ctx.lineTo(x,bottom);
+      ctx.stroke();
+    }
+
+    // Ejes
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(left,bottom);
+    ctx.lineTo(right,bottom);
+    ctx.moveTo(left,bottom);
+    ctx.lineTo(left,top);
+    ctx.stroke();
+
+    // Etiquetas ejes
+    ctx.fillStyle = "#334155";
+    ctx.font = "14px Segoe UI";
+    ctx.fillText("Concentración", canvas.width/2 - 45, canvas.height - 10);
+
+    ctx.save();
+    ctx.translate(16, canvas.height/2 + 18);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText("Efecto (%)", 0, 0);
+    ctx.restore();
+
+    // Números eje Y
+    ctx.font = "12px Segoe UI";
+    for(let i=0;i<=5;i++){
+      let val = 100 - i*20;
+      let y = top + i*(height/5);
+      ctx.fillText(val.toString(), 20, y + 4);
+    }
+
+    // Números eje X
+    for(let i=0;i<=5;i++){
+      let val = Math.round(1 + i*(199/5));
+      let x = left + i*(width/5);
+      ctx.fillText(val.toString(), x - 8, bottom + 18);
+    }
+
+    // Curva
+    ctx.beginPath();
+    for(let c=1;c<=200;c++){
+      let yVal = doseResponse(c, ic50Now, hNow, emaxNow);
+      let x = left + ((c-1)/199)*width;
+      let y = bottom - (yVal/100)*height;
+      if(c===1){
+        ctx.moveTo(x,y);
+      }else{
+        ctx.lineTo(x,y);
+      }
+    }
+    ctx.strokeStyle = "#16c79a";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Línea IC50
+    let xIc50 = left + ((ic50Now-1)/199)*width;
+    ctx.beginPath();
+    ctx.setLineDash([6,6]);
+    ctx.moveTo(xIc50, top);
+    ctx.lineTo(xIc50, bottom);
+    ctx.strokeStyle = "#f59e0b";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#b45309";
+    ctx.fillText("IC50", xIc50 + 6, top + 16);
+
+    // Punto actual
+    let effect = doseResponse(cNow, ic50Now, hNow, emaxNow);
+    let xNow = left + ((cNow-1)/199)*width;
+    let yNow = bottom - (effect/100)*height;
+
+    ctx.beginPath();
+    ctx.arc(xNow, yNow, 6, 0, 2*Math.PI);
+    ctx.fillStyle = "#2563eb";
+    ctx.fill();
+
+    ctx.fillStyle = "#1e40af";
+    ctx.fillText("Dosis actual", xNow + 8, yNow - 8);
+  }
+
+  function updateUI(){
+    const cNow = parseFloat(conc.value);
+    const ic50Now = parseFloat(ic50.value);
+    const hNow = parseFloat(hill.value);
+    const emaxNow = parseFloat(emax.value);
+
+    concValue.textContent = cNow.toFixed(0);
+    ic50Value.textContent = ic50Now.toFixed(0);
+    hillValue.textContent = hNow.toFixed(1);
+    emaxValue.textContent = emaxNow.toFixed(0);
+
+    const effect = doseResponse(cNow, ic50Now, hNow, emaxNow);
+    effectResult.textContent = effect.toFixed(2) + "%";
+    effectText.textContent = interpretation(effect);
+
+    drawChart();
+  }
+
+  [conc, ic50, hill, emax].forEach(el => {
+    el.addEventListener("input", updateUI);
+  });
+
+  updateUI();
 </script>
 
 </body>
