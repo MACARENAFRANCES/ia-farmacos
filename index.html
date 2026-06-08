@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>IA en farmacología</title>
+<title> IC50 calculator </title>
 
 <style>
 
@@ -182,13 +182,14 @@ function draw(ic50){
 }
 
 update();
-  
-<div class="section">
+</script>
+
+<div class="container">
 <h2>Calculadora IC50</h2>
 
 <p>
-El IC50 es la concentración de un fármaco necesaria para alcanzar el 50% de su efecto.
-Introduce un punto experimental para estimarlo de forma aproximada.
+El IC50 es la concentración necesaria para alcanzar el 50% del efecto.
+Introduce datos para entender cómo funciona.
 </p>
 
 Concentración:
@@ -205,7 +206,7 @@ Respuesta (%):
 
 <br><br>
 
-Resultado IC50:
+Resultado:
 <span id="ic50_resultado"></span>
 
 </div>
@@ -218,14 +219,9 @@ function calcularIC50(){
 
   if(r == 50){
     document.getElementById("ic50_resultado").innerText = c;
-  }else{
-    document.getElementById("ic50_resultado").innerText = "Aproximación simple: usa punto cercano a 50%";
+  } else {
+    document.getElementById("ic50_resultado").innerText = "Introduce un valor cercano a 50%";
   }
 }
 
 </script>
-
-</script>
-
-</body>
-</html>
