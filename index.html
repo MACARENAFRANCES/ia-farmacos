@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>IA en cribado farmacológico</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#f4f8fb;
+}
+
+header {
+  background: linear-gradient(120deg,#0a3d62,#1dd1a1);
+  color:white;
+  padding:40px;
+  text-align:center;
+}
+
+h1 {margin:0;}
+
+.section {
+  max-width:1000px;
+  margin:40px auto;
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.08);
+}
+
+.card {
+  margin-top:20
+---
+
+# ✅ ARCHIVO GITHUB
+
+````html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>IA en cribado farmacológico</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#f4f8fb;
+}
+
+header {
+  background: linear-gradient(120deg,#0a3d62,#1dd1a1);
+  color:white;
+  padding:40px;
+  text-align:center;
+}
+
+h1 {margin:0;}
+
+.section {
+  max-width:1000px;
+  margin:40px auto;
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.08);
+}
+
+.card {
+  margin-top:20px;
+  background:#f7fbff;
+  padding:20px;
+  border-left:5px solid #1dd1a1;
+  border-radius:8px;
+}
+
+h2 {
+  color:#0a3d62;
+}
+
+.chart {
+  margin-top:40px;
+  text-align:center;
+}
+
+footer {
+  text-align:center;
+  padding:20px;
+  font-size:14px;
+  color:gray;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>AI-driven Drug Screening</h1>
+<p>Modelización de curvas dosis–respuesta en farmacología computacional</p>
+</header>
+
+<div class="section">
+<h2>1. Tema</h2>
+
+<div class="card">
+Uso de IA para predecir curvas dosis–respuesta completas en cribado farmacológico.
+</div>
+</div>
+
+<div class="section">
+<h2>2. Modelo matemático</h2>
+
+<div class="card">
+Curva logística:
+
+f(c) = Emax / (1 + (c/IC50)^h)
+</div>
+</div>
+
+<div class="section">
+<h2>3. Método</h2>
+
+<div class="card">
+Mínimos cuadrados no lineales:
+
+Σ (yi - f(ci))²
+
+Métodos usados:
+- Gauss-Newton  
+- Levenberg-Marquardt  
+</div>
+</div>
+
+<div class="section">
+<h2>4. Curva dosis-respuesta</h2>
+
+<canvas id="grafico" width="400" height="300"></canvas>
+
+</div>
+
+<footer>
+Trabajo IA farmacología – 2026
+</footer>
+
+<script>
+var canvas = document.getElementById("grafico");
+var ctx = canvas.getContext("2d");
+
+// ejes
+ctx.moveTo(40,260);
+ctx.lineTo(350,260);
+ctx.moveTo(40,260);
+ctx.lineTo(40,40);
+ctx.stroke();
+
+// curva
+ctx.beginPath();
+for(let x=0; x<300; x++){
+    let y = 200 / (1 + Math.exp(-(x-150)/30));
+    ctx.lineTo(x+40,260-y);
+}
+ctx.strokeStyle="green";
+ctx.lineWidth=3;
+ctx.stroke();
+
+// IC50
+ctx.beginPath();
+ctx.setLineDash([5,5]);
+ctx.moveTo(190,40);
+ctx.lineTo(190,260);
+ctx.strokeStyle="orange";
+ctx.stroke();
+</script>
+
+</body>
+</html>
