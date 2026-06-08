@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modelo avanzado farmacológico</title>
+
+<style>
+body {
+  font-family: Arial;
+  background:#f4f9fc;
+  margin:40px;
+  line-height:1.6;
+}
+
+h1, h2 {
+  color:#0a3d62;
+}
+
+.container {
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Predicción de curvas dosis–respuesta con IA</h1>
+
+<p>
+Este trabajo analiza el uso de inteligencia artificial para predecir curvas dosis–respuesta completas en cribado farmacológico, como alternativa al uso exclusivo del IC50.
+</p>
+
+<h2>1. Justificación técnica</h2>
+
+<p>
+Trabajos recientes destacan que una curva completa proporciona más información que un valor aislado, permitiendo analizar eficacia, saturación y comportamiento farmacológico completo.
+</p>
+
+<h2>2. Problema técnico</h2>
+
+<p>
+Se dispone de múltiples observaciones experimentales (m datos) y se buscan pocos parámetros (4), lo que genera un sistema sobredimensionado.
+</p>
+
+<p>
+Modelo:
+</p>
+
+<p><b>f(c) = Emin + (Emax - Emin) / (1 + (c / IC50)^h)</b></p>
+
+<h2>3. Modelo matemático</h2>
+
+<p>
+Se define el problema como minimización de errores:
+</p>
+
+<p><b>min Σ (yi - f(ci))²</b></p>
+
+<p>
+Se pueden usar versiones robustas (Huber) para evitar influencia de valores atípicos.
+</p>
+
+<h2>4. Resolución numérica</h2>
+
+<p>
+Se emplean métodos iterativos como:
+</p>
+
+<ul>
+<li>Gauss-Newton</li>
+<li>Levenberg-Marquardt</li>
+</ul>
+
+<p>
+Estos métodos ajustan progresivamente los parámetros mediante la matriz jacobiana.
+</p>
+
+<h2>5. Discusión matemática</h2>
+
+<ul>
+<li>Identificabilidad del modelo</li>
+<li>Condicionamiento numérico</li>
+<li>Heterocedasticidad de datos</li>
+<li>Robustez frente a outliers</li>
+</ul>
+
+<h2>6. Impacto farmacológico</h2>
+
+<p>
+Permite analizar mejor candidatos, comparar fármacos y mejorar la selección en cribados.
+</p>
+
+<h2>7. Conclusión</h2>
+
+<p>
+Este enfoque combina:
+</p>
+
+<ul>
+<li>IA</li>
+<li>Sistemas sobredimensionados</li>
+<li>Ajuste de curvas</li>
+<li>Optimización numérica</li>
+</ul>
+
+</div>
+
+</body>
+</html>
