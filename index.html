@@ -22,44 +22,61 @@ header {
 }
 
 /* SECCIONES */
-.section {
+.container {
   max-width:1000px;
   margin:40px auto;
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* CAJAS */
+/* TARJETAS */
 .card {
-  background:#f7fbff;
-  padding:20px;
-  border-left:5px solid #1dd1a1;
-  border-radius:8px;
-  margin-top:20px;
+  background:#ffffff;
+  padding:30px;
+  margin:20px;
+  border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  color:#0a3d62;
   position:relative;
+  cursor:pointer;
   transition:0.3s;
 }
 
-/* TEXTO EXTRA OCULTO AL PRINCIPIO */
-.more {
+/* HOVER EFECTO */
+.card:hover {
+  transform:scale(1.03);
+}
+
+/* POPUP (EXPLICACION) */
+.card .popup {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(10,61,98,0.95);
+  color:white;
+  padding:20px;
+  border-radius:12px;
   opacity:0;
-  max-height:0;
-  overflow:hidden;
-  transition:0.4s;
-  font-size:14px;
-  color:#555;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:left;
+  font-size:15px;
+  transition:0.3s;
 }
 
-/* HOVER MUESTRA DETALLE */
-.card:hover .more {
+/* APARECE */
+.card:hover .popup {
   opacity:1;
-  max-height:200px;
-  margin-top:10px;
 }
 
-h2 {color:#0a3d62;}
+h2 {
+  text-align:center;
+  color:#0a3d62;
+}
 
 </style>
 </head>
@@ -68,73 +85,49 @@ h2 {color:#0a3d62;}
 
 <header>
 <h1>AI Drug Screening</h1>
-<p>Modelo matemático + explicación intuitiva</p>
+<p>Modelo matemático intuitivo</p>
 </header>
 
-<!-- INTRO -->
-<div class="section">
-<h2>Introducción</h2>
+<div class="container">
+
+<h2>Conceptos clave</h2>
 
 <div class="card">
-Las curvas dosis–respuesta permiten estudiar cómo cambia el efecto de un fármaco al modificar la concentración.
-
-<div class="more">
-Este tipo de curva describe todo el comportamiento del sistema biológico, lo que permite entender mejor la eficacia del fármaco frente a métodos más simples.
+Justificación
+<div class="popup">
+La inteligencia artificial utiliza curvas dosis–respuesta completas porque permiten analizar mejor el comportamiento del fármaco frente a usar únicamente el IC50, proporcionando más información sobre eficacia y respuesta.
 </div>
-
 </div>
-
-</div>
-
-<!-- JUSTIFICACION -->
-<div class="section">
-<h2>Justificación</h2>
 
 <div class="card">
-Se utilizan curvas completas en lugar de valores como el IC50 para tener una visión más real del comportamiento del fármaco.
-
-<div class="more">
-Dos fármacos pueden tener el mismo IC50 pero efectos completamente distintos en otras zonas de la curva, lo que hace necesario analizar toda la relación dosis-respuesta.
+Problema técnico
+<div class="popup">
+Se tienen datos experimentales de concentración y respuesta. El problema consiste en encontrar una función matemática que se ajuste a estos datos. Es un sistema sobredimensionado.
 </div>
-
 </div>
-
-</div>
-
-<!-- PROBLEMA -->
-<div class="section">
-<h2>Problema técnico</h2>
 
 <div class="card">
-Se dispone de datos experimentales y se busca una función que los represente.
-
-<div class="more">
-Este problema es un sistema sobredimensionado: muchos datos y pocos parámetros, por lo que se necesita ajuste de curvas.
-</div>
-
-</div>
-
-</div>
-
-<!-- MODELO -->
-<div class="section">
-<h2>Modelo matemático</h2>
-
-<div class="card">
-Se usa una función logística:
+Modelo matemático
+<div class="popup">
+Se utiliza una función logística:
 
 f(c) = Emax / (1 + (c/IC50)^h)
 
-<div class="more">
-Los parámetros se calculan minimizando el error entre la curva teórica y los datos experimentales mediante mínimos cuadrados.
+Los parámetros se ajustan mediante mínimos cuadrados para minimizar el error con respecto a los datos.
+</div>
 </div>
 
+<div class="card">
+Interpretación
+<div class="popup">
+El modelo permite entender cómo cambia el efecto con la dosis, ayudando a seleccionar concentraciones óptimas y evaluar la eficacia de un fármaco incluso sin conocimientos matemáticos avanzados.
+</div>
 </div>
 
 </div>
 
 <!-- CALCULADORA -->
-<div class="section">
+<div class="container">
 <h2>Simulador interactivo</h2>
 
 Concentración:
@@ -151,21 +144,6 @@ Resultado:
 <span id="resultado">0</span> %
 
 <canvas id="grafico" width="400" height="300"></canvas>
-
-</div>
-
-<!-- INTERPRETACION -->
-<div class="section">
-<h2>Interpretación</h2>
-
-<div class="card">
-El modelo permite analizar cómo varía el efecto con la dosis.
-
-<div class="more">
-Esto ayuda en la selección de dosis óptimas y en la evaluación de candidatos farmacológicos, facilitando la toma de decisiones incluso sin conocimientos matemáticos avanzados.
-</div>
-
-</div>
 
 </div>
 
@@ -191,7 +169,6 @@ function draw(ic50){
   var ctx = canvas.getContext("2d");
 
   ctx.clearRect(0,0,400,300);
-
   ctx.beginPath();
 
   for(let x=0; x<200; x++){
@@ -205,6 +182,48 @@ function draw(ic50){
 }
 
 update();
+  
+<div class="section">
+<h2>Calculadora IC50</h2>
+
+<p>
+El IC50 es la concentración de un fármaco necesaria para alcanzar el 50% de su efecto.
+Introduce un punto experimental para estimarlo de forma aproximada.
+</p>
+
+Concentración:
+<input type="number" id="c_input">
+
+<br>
+
+Respuesta (%):
+<input type="number" id="r_input">
+
+<br><br>
+
+<button onclick="calcularIC50()">Calcular IC50</button>
+
+<br><br>
+
+Resultado IC50:
+<span id="ic50_resultado"></span>
+
+</div>
+
+<script>
+
+function calcularIC50(){
+  let c = document.getElementById("c_input").value;
+  let r = document.getElementById("r_input").value;
+
+  if(r == 50){
+    document.getElementById("ic50_resultado").innerText = c;
+  }else{
+    document.getElementById("ic50_resultado").innerText = "Aproximación simple: usa punto cercano a 50%";
+  }
+}
+
+</script>
 
 </script>
 
