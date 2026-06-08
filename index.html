@@ -3,32 +3,21 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>IA en cribado farmacológico</title>
+<title>IA en farmacología</title>
 
 <style>
 
 body {
   margin:0;
-  font-family: 'Segoe UI', Arial;
-  background:#f5f9fc;
-  color:#333;
+  font-family: 'Segoe UI';
+  background:#f4f9fc;
 }
 
 header {
   background: linear-gradient(120deg,#0a3d62,#1dd1a1);
   color:white;
-  padding:50px;
+  padding:40px;
   text-align:center;
-}
-
-h1 {
-  margin:0;
-  font-size:32px;
-}
-
-.subtitle {
-  margin-top:10px;
-  font-size:18px;
 }
 
 .section {
@@ -42,186 +31,109 @@ h1 {
 
 .card {
   margin-top:20px;
+  padding:20px;
   background:#f7fbff;
-  padding:20px;
   border-left:5px solid #1dd1a1;
-  border-radius:8px;
 }
 
-h2 {
-  color:#0a3d62;
-}
+h2 {color:#0a3d62;}
 
-.chart {
-  text-align:center;
-  margin-top:40px;
-}
-
-footer {
-  text-align:center;
-  padding:20px;
-  font-size:14px;
-  color:gray;
-}
-
-/* efecto hover */
-.card:hover {
-  transform: scale(1.02);
-  transition: 0.3s;
+input {
+  margin:10px;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <header>
-<h1>AI-driven Drug Screening</h1>
-<p class="subtitle">Modelización matemática y uso de IA en farmacología</p>
+<h1>AI Drug Screening</h1>
+<p>Modelo matemático interactivo</p>
 </header>
 
-<!-- INTRO -->
 <div class="section">
-<h2>1. Introducción</h2>
-
+<h2>Justificación</h2>
 <div class="card">
-El descubrimiento de nuevos fármacos es un proceso complejo y costoso. En la actualidad, la inteligencia artificial se ha convertido en una herramienta clave para acelerar el cribado de compuestos y predecir su comportamiento en sistemas biológicos.
+La inteligencia artificial en farmacología utiliza curvas dosis–respuesta completas en lugar de métricas simples como el IC50, ya que permiten entender mejor el comportamiento del fármaco.
 
-Uno de los aspectos más importantes en este proceso es entender cómo responde un organismo a diferentes concentraciones de un fármaco, lo cual se representa mediante curvas dosis–respuesta.
+Esto mejora la selección de candidatos y permite una interpretación más completa de los efectos.
 </div>
 </div>
 
-<!-- JUSTIFICACION -->
 <div class="section">
-<h2>2. Justificación de la elección</h2>
+<h2>Simulador interactivo</h2>
 
 <div class="card">
-La elección de este tema se justifica porque en la investigación actual en inteligencia artificial aplicada a farmacología se está pasando de utilizar medidas simples como el IC50 a modelizar la curva dosis–respuesta completa.
+Introduce valores para simular el efecto del fármaco:
+<br><br>
 
-Esto permite analizar no solo la potencia del fármaco, sino también su eficacia máxima, su pendiente y posibles efectos tóxicos.
+Concentración:
+<input type="range" id="conc" min="1" max="300" value="150" oninput="update()">
 
-Estudios recientes indican que modelos de aprendizaje automático que predicen curvas completas ofrecen mejores resultados en cribado computacional que aquellos que solo estiman valores aislados.
+<br>
+
+IC50:
+<input type="range" id="ic50" min="50" max="250" value="150" oninput="update()">
+
+<br><br>
+
+Resultado:
+<span id="resultado">0</span> %
 </div>
 
-<div class="card">
-Desde el punto de vista matemático, este problema conduce de forma natural a la resolución de sistemas sobredimensionados y al uso de métodos de ajuste de curvas, ya que se dispone de muchas observaciones experimentales y pocos parámetros a estimar.
-</div>
-</div>
-
-<!-- PROBLEMA -->
-<div class="section">
-<h2>3. Problema técnico</h2>
-
-<div class="card">
-Se dispone de datos experimentales que miden la respuesta celular ante diferentes concentraciones de un fármaco.
-
-El objetivo es ajustar una curva que describa esta relación mediante el modelo logístico:
-</div>
-
-<div class="card">
-f(c) = Emax / (1 + (c / IC50)^h)
-
-donde:
-<br>• Emax → efecto máximo
-<br>• IC50 → concentración de semirrespuesta
-<br>• h → pendiente de la curva
-</div>
-</div>
-
-<!-- METODO -->
-<div class="section">
-<h2>4. Modelo matemático</h2>
-
-<div class="card">
-El problema se formula como un sistema sobredimensionado, ya que existen muchas observaciones experimentales (datos) y pocos parámetros a estimar.
-
-Para resolverlo se utilizan métodos de mínimos cuadrados:
-</div>
-
-<div class="card">
-Minimizar:
-
-Σ (yi − f(ci))²
-</div>
-
-<div class="card">
-Los algoritmos más utilizados son:
-<br>• Gauss-Newton
-<br>• Levenberg-Marquardt
-</div>
-</div>
-
-<!-- GRAFICA -->
-<div class="section">
-<h2>5. Visualización de la curva</h2>
-
-<div class="chart">
 <canvas id="grafico" width="400" height="300"></canvas>
+
 </div>
 
-<div class="card">
-La gráfica representa cómo varía la respuesta biológica en función de la concentración del fármaco.
-
-El punto IC50 indica la concentración en la cual se alcanza el 50% del efecto, siendo un parámetro clave en farmacología.
-</div>
-</div>
-
-<!-- INTERPRETACION -->
 <div class="section">
-<h2>6. Interpretación y limitaciones</h2>
-
+<h2>Interpretación</h2>
 <div class="card">
-Una correcta estimación de la curva dosis–respuesta permite seleccionar candidatos más eficaces y seguros en el proceso de desarrollo de fármacos.
+El modelo permite visualizar cómo pequeñas variaciones en la dosis afectan al resultado.
 
-Sin embargo, el modelo presenta limitaciones:
-<br>• No siempre captura comportamientos no lineales complejos
-<br>• Puede verse afectado por ruido experimental
-<br>• No sustituye validación biológica real
+Esto es clave para seleccionar dosis óptimas y minimizar efectos adversos.
 </div>
 </div>
-
-<footer>
-Trabajo académico – IA en farmacología – 2026
-</footer>
 
 <script>
-var canvas = document.getElementById("grafico");
-var ctx = canvas.getContext("2d");
 
-// ejes
-ctx.strokeStyle="black";
-ctx.moveTo(40,260);
-ctx.lineTo(350,260);
-ctx.moveTo(40,260);
-ctx.lineTo(40,40);
-ctx.stroke();
-
-// etiquetas
-ctx.fillText("Concentración",150,290);
-ctx.fillText("Respuesta",5,30);
-
-// curva
-ctx.beginPath();
-for(let x=0; x<300; x++){
-    let y = 200 / (1 + Math.exp(-(x-150)/30));
-    ctx.lineTo(x+40,260-y);
+function modelo(c, ic50){
+  return 100 / (1 + Math.exp(-(c-ic50)/30));
 }
-ctx.strokeStyle="#1dd1a1";
-ctx.lineWidth=3;
-ctx.stroke();
 
-// IC50
-ctx.beginPath();
-ctx.setLineDash([5,5]);
-ctx.moveTo(190,40);
-ctx.lineTo(190,260);
-ctx.strokeStyle="orange";
-ctx.stroke();
+function update(){
 
-ctx.fillText("IC50",200,50);
+  let c = document.getElementById("conc").value;
+  let ic50 = document.getElementById("ic50").value;
+
+  let y = modelo(c, ic50);
+  document.getElementById("resultado").innerText = y.toFixed(2);
+
+  draw(ic50);
+}
+
+function draw(ic50){
+
+  var canvas = document.getElementById("grafico");
+  var ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0,0,400,300);
+
+  ctx.beginPath();
+
+  for(let x=0; x<300; x++){
+    let y = modelo(x, ic50);
+    ctx.lineTo(x+40,260-y*2);
+  }
+
+  ctx.strokeStyle="green";
+  ctx.lineWidth=3;
+  ctx.stroke();
+}
+
+update();
+
 </script>
 
 </body>
 </html>
-``
